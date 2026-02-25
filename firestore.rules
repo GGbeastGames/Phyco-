@@ -1,0 +1,177 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && request.auth.token.isAdmin == true;
+    }
+
+    function userFieldsValid() {
+      return request.resource.data.keys().hasOnly([
+        'uid',
+        'balance',
+        'trace',
+        'xp',
+        'level',
+        'rankScore',
+        'ownedCommands',
+        'installedModules',
+        'traits',
+        'cooldowns',
+        'questProgress',
+        'blockchainAssets',
+        'pvp',
+        'updatedAt',
+        'displayName',
+        'photoURL',
+        'lastSeenAt',
+        'isAdmin',
+        'createdAt'
+      ]);
+    }
+
+    function userProtectedFieldsUnchanged() {
+      return request.resource.data.uid == resource.data.uid
+        && request.resource.data.isAdmin == resource.data.isAdmin
+        && request.resource.data.createdAt == resource.data.createdAt;
+    }
+
+    function economyDeltaWithinLimit() {
+      return request.resource.data.balance is number
+        && resource.data.balance is number
+        && request.resource.data.balance >= 0
+        && (request.resource.data.balance - resource.data.balance) <= 1000;
+    }
+
+    function traceBounds() {
+      return request.resource.data.trace is number
+        && request.resource.data.trace >= 0
+        && request.resource.data.trace <= 100;
+    }
+
+    function levelBounds() {
+      return request.resource.data.level is number
+        && request.resource.data.level >= 1
+        && request.resource.data.level <= 999;
+    }
+
+    function cooldownTypeValid() {
+      return !(request.resource.data.cooldowns is map) || request.resource.data.cooldowns.size() <= 200;
+    }
+
+    match /users/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+
+      allow create: if isOwner(uid)
+        && request.resource.data.uid == uid
+        && request.resource.data.isAdmin == false
+        && request.resource.data.balance == 0
+        && request.resource.data.trace == 0
+        && request.resource.data.level == 1
+        && request.resource.data.xp == 0;
+
+      allow update: if isOwner(uid)
+        && userFieldsValid()
+        && userProtectedFieldsUnchanged()
+        && economyDeltaWithinLimit()
+        && traceBounds()
+        && levelBounds()
+        && cooldownTypeValid();
+
+      allow delete: if false;
+    }
+
+    match /userPublic/{uid} {
+      allow read: if true;
+      allow write: if isOwner(uid) || isAdmin();
+    }
+
+    match /commands/{commandId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /quests/{questId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /marketRotations/{rotationId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /seasonConfigs/{seasonId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /globalState/{docId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /globalState/{docId}/events/{eventId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+
+    match /pvpMatches/{matchId} {
+      function playerInMatch() {
+        return isSignedIn()
+          && (
+            request.resource.data.playerAUid == request.auth.uid
+            || request.resource.data.playerBUid == request.auth.uid
+            || resource.data.playerAUid == request.auth.uid
+            || resource.data.playerBUid == request.auth.uid
+          );
+      }
+
+      allow read: if isSignedIn() && (
+        resource.data.playerAUid == request.auth.uid
+        || resource.data.playerBUid == request.auth.uid
+        || isAdmin()
+      );
+
+      allow create: if isSignedIn()
+        && request.resource.data.status == 'queued'
+        && request.resource.data.playerAUid == request.auth.uid
+        && request.resource.data.playerBUid is string;
+
+      allow update: if isSignedIn() && playerInMatch() && (
+        isAdmin()
+        || (
+          request.resource.data.status in ['active', 'completed', 'aborted']
+          && request.resource.data.playerAUid == resource.data.playerAUid
+          && request.resource.data.playerBUid == resource.data.playerBUid
+        )
+      );
+
+      allow delete: if isAdmin();
+    }
+
+    match /adminLogs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin()
+        && request.resource.data.actorUid == request.auth.uid
+        && request.resource.data.createdAt is timestamp;
+      allow update, delete: if false;
+    }
+
+    match /economySnapshots/{snapshotId} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
