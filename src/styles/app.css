@@ -1,0 +1,56 @@
+:root {
+  color-scheme: dark;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #0f2f4a 0%, #06070f 45%, #020204 100%);
+  color: #d8ecff;
+}
+
+.shell {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 2rem 1rem 3rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.shell__header h1 {
+  margin: 0;
+  letter-spacing: 0.08em;
+  color: #9fe9ff;
+}
+
+.shell__header p {
+  margin-top: 0.5rem;
+  opacity: 0.9;
+}
+
+.panel {
+  background: rgba(8, 14, 28, 0.82);
+  border: 1px solid rgba(108, 218, 255, 0.4);
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 0 25px rgba(93, 183, 255, 0.2);
+}
+
+.panel h2 {
+  margin-top: 0;
+  color: #80d8ff;
+}
+
+.panel ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.panel__hint {
+  margin-top: 0.9rem;
+  font-size: 0.9rem;
+  color: #8ca4b5;
+}
