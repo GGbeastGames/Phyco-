@@ -12,12 +12,12 @@ const coreApps = [
   'Operator Console'
 ];
 
-const stepThreeDeliverables = [
-  'Deny-by-default production Firestore rules posture',
-  'User isolation + strict owner/admin write authority gates',
-  'Server-authoritative economy and cooldown protections',
-  'Append-only immutable admin log enforcement',
-  'Exploit-focused emulator test matrix for rules validation'
+const stepFourDeliverables = [
+  'Production-ready repo topology documented',
+  'CI pipeline for install/check/rules-test/build',
+  'GitHub Pages deployment workflow for static dist publish',
+  'Environment + secret handling strategy documented',
+  'Route fallback and hash-navigation safety retained'
 ];
 
 export function DesktopShell() {
@@ -25,7 +25,7 @@ export function DesktopShell() {
     <main className="shell">
       <header className="shell__header">
         <h1>ROOTACCESS // CHAPTER 1</h1>
-        <p>Step 3 security validation is now initiated with hardened rules + exploit test coverage.</p>
+        <p>Step 4 repo/deploy topology is now initiated with CI + Pages deployment hardening.</p>
       </header>
 
       <section className="panel">
@@ -38,13 +38,13 @@ export function DesktopShell() {
       </section>
 
       <section className="panel">
-        <h2>Step 3 Deliverables Locked</h2>
+        <h2>Step 4 Deliverables Locked</h2>
         <ul>
-          {stepThreeDeliverables.map((item) => (
+          {stepFourDeliverables.map((item) => (
             <li key={item}>{item}</li>
           ))}
         </ul>
-        <p className="panel__hint">See docs/step-3/rules-test-matrix.md for exploit tests and runbook.</p>
+        <p className="panel__hint">See docs/step-4/repo-topology-and-ci.md for exploit tests and runbook.</p>
       </section>
 
       <section className="panel panel--note">

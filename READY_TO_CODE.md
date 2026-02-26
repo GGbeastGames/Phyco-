@@ -1,22 +1,23 @@
-# RootAccess — Step 3 Status
+# RootAccess — Step 4 Status
 
-Step 3 Firestore security hardening and exploit validation is now in place.
+Step 4 repo/deploy topology hardening is now in place.
 
 ## What is now completed
 
-- Hardened `firestore.rules` with tighter owner/admin authority boundaries.
-- Enforced server-authoritative economy and cooldown posture.
-- Added user subcollection protections for command intents, cooldown docs, and quest claims.
-- Added emulator-backed rules test suite for cross-user, admin-gating, tamper, and append-only log exploits.
-- Added Step 3 test matrix runbook documentation in `docs/step-3/rules-test-matrix.md`.
+- Added GitHub Actions CI pipeline for install, check, rules matrix test, and production build.
+- Added GitHub Pages deployment workflow for static `dist/` publishing.
+- Added Step 4 topology/runbook documentation with structure, CI flow, and environment strategy.
+- Added `.env.example` template to standardize `VITE_*` runtime configuration without committing secrets.
+- Preserved GitHub Pages-safe HTML-first entry model and route fallback strategy.
 
 ## Commands
 
-- Install deps: `npm install`
+- Install deps: `npm ci`
 - Rule exploit tests: `npm run test:rules`
 - Checks: `npm run check`
 - Build: `npm run build`
+- Preview: `npm run preview`
 
 ## Immediate next coding target
 
-Step 4: repo/deploy topology hardening and CI automation (lint/type/test/build/deploy pipeline).
+Step 5: implement OS windowing system core (focus stack, launcher/taskbar, minimize/maximize/snap, reusable app window container).
