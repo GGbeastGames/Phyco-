@@ -1,4 +1,5 @@
 import { useMemo, useRef, useState } from 'react';
+import { TerminalApp } from './TerminalApp';
 
 type AppKey =
   | 'terminal'
@@ -43,13 +44,14 @@ const APPS: DesktopApp[] = [
   { key: 'operator', title: 'Operator Console', icon: '#', summary: 'Admin controls, moderation, and audit logs.' }
 ];
 
-function nextWindowLayout(index: number) {
+function nextWindowLayout(index: number, appKey: AppKey) {
   const step = 28;
+  const isTerminal = appKey === 'terminal';
   return {
     x: 48 + (index % 6) * step,
     y: 92 + (index % 5) * step,
-    width: 420,
-    height: 300
+    width: isTerminal ? 620 : 420,
+    height: isTerminal ? 390 : 300
   };
 }
 
@@ -74,7 +76,7 @@ export function DesktopShell() {
       return;
     }
 
-    const layout = nextWindowLayout(windows.length);
+    const layout = nextWindowLayout(windows.length, appKey);
     setWindows((prev) => [...prev, { appKey, ...layout, minimized: false }]);
     focusWindow(appKey);
   }
@@ -124,6 +126,23 @@ export function DesktopShell() {
     dragRef.current = null;
   }
 
+  function renderWindowContent(app: DesktopApp) {
+    if (app.key === 'terminal') {
+      return <TerminalApp />;
+    }
+
+    return (
+      <>
+        <p>{app.summary}</p>
+        <ul>
+          <li>Window manager active: drag, focus stack, minimize, maximize, close.</li>
+          <li>Reusable app frame established for Step 6+ feature internals.</li>
+          <li>GitHub Pages remains HTML-first (`index.html` + `404.html`) with hash routing.</li>
+        </ul>
+      </>
+    );
+  }
+
   return (
     <main
       className="ra-desktop"
@@ -134,7 +153,7 @@ export function DesktopShell() {
       onTouchEnd={stopDrag}
     >
       <header className="ra-topbar">
-        <h1>ROOTACCESS // CHAPTER 1 // STEP 5 WINDOWING CORE</h1>
+        <h1>ROOTACCESS // CHAPTER 1 // STEP 6 TERMINAL LOOP</h1>
         <span>Theme: Hacker-inspired neon console UI</span>
       </header>
 
@@ -173,14 +192,7 @@ export function DesktopShell() {
                     <button onClick={() => closeWindow(w.appKey)} type="button">×</button>
                   </div>
                 </div>
-                <div className="ra-window__body">
-                  <p>{app.summary}</p>
-                  <ul>
-                    <li>Window manager active: drag, focus stack, minimize, maximize, close.</li>
-                    <li>Reusable app frame established for Step 6+ feature internals.</li>
-                    <li>GitHub Pages remains HTML-first (`index.html` + `404.html`) with hash routing.</li>
-                  </ul>
-                </div>
+                <div className="ra-window__body">{renderWindowContent(app)}</div>
               </article>
             );
           })}

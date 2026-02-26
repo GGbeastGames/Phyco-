@@ -1,17 +1,14 @@
-# RootAccess — Step 5 Status
+# RootAccess — Step 6 Status
 
-Step 5 OS windowing core and white-screen deployment fixes are now in place.
+Step 6 Terminal gameplay loop and white-screen guardrails are now in place.
 
 ## What is now completed
 
-- Implemented desktop window manager with drag/focus/minimize/maximize/close lifecycle.
-- Added launcher + taskbar behaviors for all core app windows.
-- Applied hacker-style neon terminal visual system for GUI direction.
-- Added Step 5 implementation notes in `docs/step-5/windowing-system.md`.
-- Added GitHub Pages deployment hardening for blank-page prevention:
-  - `public/404.html` and `public/main.html` included in build output,
-  - `public/.nojekyll` included,
-  - documented source-cause around raw source branch serving.
+- Implemented Terminal app inside the window manager as a real gameplay surface.
+- Added command execution loop with cooldowns, rewards, trace pressure, and leveling progression.
+- Added terminal HUD/log/input UX with helper commands (`help`, `status`, `clear`).
+- Added Step 6 implementation notes in `docs/step-6/terminal-game-loop.md`.
+- Added root `index.html` bootstrap warning fallback to make source-vs-build deployment failures visible instead of an all-white page.
 
 ## Commands
 
@@ -23,4 +20,4 @@ Step 5 OS windowing core and white-screen deployment fixes are now in place.
 
 ## Immediate next coding target
 
-Step 6: build Terminal app gameplay loop inside the new reusable window container.
+Step 7: implement Black Market gameplay loop and integrate shared progression economy state.

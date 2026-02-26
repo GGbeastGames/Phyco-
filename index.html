@@ -4,9 +4,27 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>RootAccess Chapter 1</title>
+    <style>
+      #boot-warning { display:none; margin:1rem; padding:1rem; border:1px solid #ff6b8a55; background:#1c0d12; color:#ffd5de; font-family: monospace; border-radius:8px; }
+      #boot-warning a { color:#9de8ff; }
+    </style>
   </head>
   <body>
     <div id="root"></div>
+    <div id="boot-warning">
+      App bootstrap did not start. If this is GitHub Pages, ensure the site is deploying the built <code>dist/</code> artifact (Actions Pages deploy), not raw repository source files.
+      <br />
+      Try opening <a href="./main.html">main.html</a>.
+    </div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      window.setTimeout(() => {
+        const root = document.getElementById('root');
+        if (root && root.childElementCount === 0) {
+          const msg = document.getElementById('boot-warning');
+          if (msg) msg.style.display = 'block';
+        }
+      }, 2200);
+    </script>
   </body>
 </html>

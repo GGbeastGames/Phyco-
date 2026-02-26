@@ -162,3 +162,73 @@ body {
     grid-row: 3;
   }
 }
+
+
+.ra-terminal {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: 0.5rem;
+  height: 100%;
+}
+
+.ra-terminal__hud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  font-size: 0.75rem;
+}
+
+.ra-terminal__hud span {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 0.2rem 0.45rem;
+  background: #071607;
+}
+
+.ra-terminal__hud .is-alert {
+  border-color: #ff4f6f;
+  color: #ffd5de;
+}
+
+.ra-terminal__log {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #020602;
+  padding: 0.55rem;
+  font-size: 0.78rem;
+  overflow: auto;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.ra-terminal__input {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.ra-terminal__input label {
+  font-size: 0.74rem;
+}
+
+.ra-terminal__input input {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: #020602;
+  color: var(--text);
+  border-radius: 7px;
+  min-height: 34px;
+  padding: 0 0.55rem;
+  font-family: inherit;
+}
+
+.ra-terminal__input button {
+  border: 1px solid var(--line);
+  background: #061106;
+  color: var(--text);
+  border-radius: 7px;
+  min-height: 34px;
+  font-family: inherit;
+  padding: 0 0.7rem;
+}
