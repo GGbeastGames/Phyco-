@@ -12,7 +12,9 @@
     "preview": "vite preview --host 0.0.0.0 --port 4173",
     "check": "npm run typecheck && npm run lint",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . --ext ts,tsx --max-warnings 0"
+    "lint": "eslint . --ext ts,tsx --max-warnings 0",
+    "test:rules": "firebase emulators:exec --only firestore \"vitest run tests/firestore.rules.spec.ts\"",
+    "test": "npm run test:rules"
   },
   "dependencies": {
     "react": "^18.3.1",
@@ -29,6 +31,10 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "typescript": "^5.9.2",
-    "vite": "^5.4.20"
+    "vite": "^5.4.20",
+    "@firebase/rules-unit-testing": "^3.0.4",
+    "firebase": "^10.14.1",
+    "firebase-tools": "^14.16.0",
+    "vitest": "^2.1.8"
   }
 }

@@ -10,10 +10,13 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      return isSignedIn() && request.auth.token.isAdmin == true;
+      return isSignedIn()
+        && request.auth.token is map
+        && request.auth.token.keys().hasAny(['isAdmin'])
+        && request.auth.token.isAdmin == true;
     }
 
-    function userFieldsValid() {
+    function userCreateShape(uid) {
       return request.resource.data.keys().hasOnly([
         'uid',
         'balance',
@@ -34,58 +37,78 @@ service cloud.firestore {
         'lastSeenAt',
         'isAdmin',
         'createdAt'
+      ])
+      && request.resource.data.uid == uid
+      && request.resource.data.isAdmin == false
+      && request.resource.data.balance == 0
+      && request.resource.data.trace == 0
+      && request.resource.data.level == 1
+      && request.resource.data.xp == 0
+      && request.resource.data.rankScore == 0;
+    }
+
+    function userOwnerMutableFieldsOnly() {
+      return request.resource.data.diff(resource.data).changedKeys().hasOnly([
+        'displayName',
+        'photoURL',
+        'lastSeenAt',
+        'updatedAt'
       ]);
     }
 
-    function userProtectedFieldsUnchanged() {
+    function immutableAdminAndIdentityFields() {
       return request.resource.data.uid == resource.data.uid
         && request.resource.data.isAdmin == resource.data.isAdmin
         && request.resource.data.createdAt == resource.data.createdAt;
     }
 
-    function economyDeltaWithinLimit() {
-      return request.resource.data.balance is number
-        && resource.data.balance is number
-        && request.resource.data.balance >= 0
-        && (request.resource.data.balance - resource.data.balance) <= 1000;
-    }
-
-    function traceBounds() {
+    function baselineUserBounds() {
       return request.resource.data.trace is number
         && request.resource.data.trace >= 0
-        && request.resource.data.trace <= 100;
-    }
-
-    function levelBounds() {
-      return request.resource.data.level is number
+        && request.resource.data.trace <= 100
+        && request.resource.data.level is number
         && request.resource.data.level >= 1
-        && request.resource.data.level <= 999;
-    }
-
-    function cooldownTypeValid() {
-      return !(request.resource.data.cooldowns is map) || request.resource.data.cooldowns.size() <= 200;
+        && request.resource.data.level <= 999
+        && request.resource.data.balance is number
+        && request.resource.data.balance >= 0;
     }
 
     match /users/{uid} {
       allow read: if isOwner(uid) || isAdmin();
 
-      allow create: if isOwner(uid)
-        && request.resource.data.uid == uid
-        && request.resource.data.isAdmin == false
-        && request.resource.data.balance == 0
-        && request.resource.data.trace == 0
-        && request.resource.data.level == 1
-        && request.resource.data.xp == 0;
+      allow create: if isOwner(uid) && userCreateShape(uid);
 
-      allow update: if isOwner(uid)
-        && userFieldsValid()
-        && userProtectedFieldsUnchanged()
-        && economyDeltaWithinLimit()
-        && traceBounds()
-        && levelBounds()
-        && cooldownTypeValid();
+      allow update: if immutableAdminAndIdentityFields()
+        && baselineUserBounds()
+        && (
+          (isOwner(uid) && userOwnerMutableFieldsOnly())
+          || isAdmin()
+        );
 
       allow delete: if false;
+
+      match /commandIntents/{intentId} {
+        allow read: if isOwner(uid) || isAdmin();
+        allow create: if isOwner(uid)
+          && request.resource.data.uid == uid
+          && request.resource.data.createdAt is timestamp
+          && request.resource.data.nonce is string
+          && request.resource.data.intentHash is string;
+        allow update, delete: if false;
+      }
+
+      match /cooldowns/{commandId} {
+        allow read: if isOwner(uid) || isAdmin();
+        allow write: if isAdmin();
+      }
+
+      match /questClaims/{questId} {
+        allow read: if isOwner(uid) || isAdmin();
+        allow create: if isOwner(uid)
+          && request.resource.data.uid == uid
+          && request.resource.data.claimedAt is timestamp;
+        allow update, delete: if false;
+      }
     }
 
     match /userPublic/{uid} {
@@ -124,16 +147,6 @@ service cloud.firestore {
     }
 
     match /pvpMatches/{matchId} {
-      function playerInMatch() {
-        return isSignedIn()
-          && (
-            request.resource.data.playerAUid == request.auth.uid
-            || request.resource.data.playerBUid == request.auth.uid
-            || resource.data.playerAUid == request.auth.uid
-            || resource.data.playerBUid == request.auth.uid
-          );
-      }
-
       allow read: if isSignedIn() && (
         resource.data.playerAUid == request.auth.uid
         || resource.data.playerBUid == request.auth.uid
@@ -145,13 +158,17 @@ service cloud.firestore {
         && request.resource.data.playerAUid == request.auth.uid
         && request.resource.data.playerBUid is string;
 
-      allow update: if isSignedIn() && playerInMatch() && (
-        isAdmin()
-        || (
-          request.resource.data.status in ['active', 'completed', 'aborted']
-          && request.resource.data.playerAUid == resource.data.playerAUid
-          && request.resource.data.playerBUid == resource.data.playerBUid
+      allow update: if isAdmin() || (
+        isSignedIn()
+        && resource.data.status == 'queued'
+        && request.resource.data.status == 'active'
+        && (
+          resource.data.playerAUid == request.auth.uid
+          || resource.data.playerBUid == request.auth.uid
         )
+        && request.resource.data.playerAUid == resource.data.playerAUid
+        && request.resource.data.playerBUid == resource.data.playerBUid
+        && request.resource.data.winnerUid == null
       );
 
       allow delete: if isAdmin();

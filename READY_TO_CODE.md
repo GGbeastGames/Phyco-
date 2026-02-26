@@ -1,23 +1,22 @@
-# RootAccess — Step 2 Status
+# RootAccess — Step 3 Status
 
-Step 2 Firebase architecture blueprint is now in place.
+Step 3 Firestore security hardening and exploit validation is now in place.
 
 ## What is now completed
 
-- Canonical Firestore schema documented with required fields and write authority by collection.
-- Query-heavy UI paths mapped to explicit index requirements in `firestore.indexes.json`.
-- Cost controls documented: projection documents + listener scoping.
-- Data lifecycle and rollback strategy documented for logs, events, matches, and snapshots.
-- Typed Firestore contracts and path constants added under `src/` for implementation safety.
-- GitHub Pages runtime note made explicit: HTML entry files (`index.html` + `404.html`) are the practical click-path backbone; TS/React/CSS support behavior/rendering.
+- Hardened `firestore.rules` with tighter owner/admin authority boundaries.
+- Enforced server-authoritative economy and cooldown posture.
+- Added user subcollection protections for command intents, cooldown docs, and quest claims.
+- Added emulator-backed rules test suite for cross-user, admin-gating, tamper, and append-only log exploits.
+- Added Step 3 test matrix runbook documentation in `docs/step-3/rules-test-matrix.md`.
 
 ## Commands
 
 - Install deps: `npm install`
-- Dev server: `npm run dev`
-- Build: `npm run build`
+- Rule exploit tests: `npm run test:rules`
 - Checks: `npm run check`
+- Build: `npm run build`
 
 ## Immediate next coding target
 
-Step 3: finalize and validate `firestore.rules` against a rules test matrix (cross-user writes, admin gating, reward/cooldown tamper attempts).
+Step 4: repo/deploy topology hardening and CI automation (lint/type/test/build/deploy pipeline).

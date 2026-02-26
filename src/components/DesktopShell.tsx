@@ -12,12 +12,12 @@ const coreApps = [
   'Operator Console'
 ];
 
-const stepTwoDeliverables = [
-  'Canonical Firestore collection tree + field ownership',
-  'Index spec for leaderboard, PvP queue, market, quests, events, admin logs',
-  'Data lifecycle + archival rules for logs/events/matches/snapshots',
-  'Projection strategy for low-cost profile reads (userPublic)',
-  'Subcollection strategy for command intents, cooldowns, and quest claims'
+const stepThreeDeliverables = [
+  'Deny-by-default production Firestore rules posture',
+  'User isolation + strict owner/admin write authority gates',
+  'Server-authoritative economy and cooldown protections',
+  'Append-only immutable admin log enforcement',
+  'Exploit-focused emulator test matrix for rules validation'
 ];
 
 export function DesktopShell() {
@@ -25,7 +25,7 @@ export function DesktopShell() {
     <main className="shell">
       <header className="shell__header">
         <h1>ROOTACCESS // CHAPTER 1</h1>
-        <p>Step 2 Firebase architecture blueprint is now initiated and implementation-ready.</p>
+        <p>Step 3 security validation is now initiated with hardened rules + exploit test coverage.</p>
       </header>
 
       <section className="panel">
@@ -38,13 +38,13 @@ export function DesktopShell() {
       </section>
 
       <section className="panel">
-        <h2>Step 2 Deliverables Locked</h2>
+        <h2>Step 3 Deliverables Locked</h2>
         <ul>
-          {stepTwoDeliverables.map((item) => (
+          {stepThreeDeliverables.map((item) => (
             <li key={item}>{item}</li>
           ))}
         </ul>
-        <p className="panel__hint">See docs/step-2/firebase-architecture-blueprint.md for canonical schema + index guidance.</p>
+        <p className="panel__hint">See docs/step-3/rules-test-matrix.md for exploit tests and runbook.</p>
       </section>
 
       <section className="panel panel--note">
