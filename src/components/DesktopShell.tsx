@@ -12,12 +12,12 @@ const coreApps = [
   'Operator Console'
 ];
 
-const stepOneDeliverables = [
-  'Game loop + progression pacing map',
-  'Command taxonomy with unlock matrix',
-  'Firebase free-tier read/write assumptions',
-  'Threat model with anti-cheat mitigation catalog',
-  'UX pillars + visual language board constraints'
+const stepTwoDeliverables = [
+  'Canonical Firestore collection tree + field ownership',
+  'Index spec for leaderboard, PvP queue, market, quests, events, admin logs',
+  'Data lifecycle + archival rules for logs/events/matches/snapshots',
+  'Projection strategy for low-cost profile reads (userPublic)',
+  'Subcollection strategy for command intents, cooldowns, and quest claims'
 ];
 
 export function DesktopShell() {
@@ -25,7 +25,7 @@ export function DesktopShell() {
     <main className="shell">
       <header className="shell__header">
         <h1>ROOTACCESS // CHAPTER 1</h1>
-        <p>Step 1 foundation is now scaffolded and ready for feature implementation.</p>
+        <p>Step 2 Firebase architecture blueprint is now initiated and implementation-ready.</p>
       </header>
 
       <section className="panel">
@@ -38,13 +38,21 @@ export function DesktopShell() {
       </section>
 
       <section className="panel">
-        <h2>Step 1 Deliverables Locked</h2>
+        <h2>Step 2 Deliverables Locked</h2>
         <ul>
-          {stepOneDeliverables.map((item) => (
+          {stepTwoDeliverables.map((item) => (
             <li key={item}>{item}</li>
           ))}
         </ul>
-        <p className="panel__hint">See docs/step-1/design-lock.md for implementation detail.</p>
+        <p className="panel__hint">See docs/step-2/firebase-architecture-blueprint.md for canonical schema + index guidance.</p>
+      </section>
+
+      <section className="panel panel--note">
+        <h2>GitHub Pages Runtime Note</h2>
+        <p>
+          Practical click-navigation is HTML-first (<code>index.html</code> + <code>404.html</code> hash handoff). React/TypeScript/CSS are support
+          layers that render windows, interactions, and data flows on top of that static entry.
+        </p>
       </section>
     </main>
   );

@@ -1,14 +1,15 @@
-# RootAccess — Step 1 Kickoff Status
+# RootAccess — Step 2 Status
 
-Step 1 starting implementation is now in place.
+Step 2 Firebase architecture blueprint is now in place.
 
 ## What is now completed
 
-- Vite + React + TypeScript scaffold added.
-- HashRouter baseline wired for GitHub Pages-safe route behavior.
-- `404.html` redirect fallback added.
-- Basic desktop shell placeholder UI added for immediate feature expansion.
-- Step 1 design-lock deliverables documented in `docs/step-1/design-lock.md`.
+- Canonical Firestore schema documented with required fields and write authority by collection.
+- Query-heavy UI paths mapped to explicit index requirements in `firestore.indexes.json`.
+- Cost controls documented: projection documents + listener scoping.
+- Data lifecycle and rollback strategy documented for logs, events, matches, and snapshots.
+- Typed Firestore contracts and path constants added under `src/` for implementation safety.
+- GitHub Pages runtime note made explicit: HTML entry files (`index.html` + `404.html`) are the practical click-path backbone; TS/React/CSS support behavior/rendering.
 
 ## Commands
 
@@ -19,4 +20,4 @@ Step 1 starting implementation is now in place.
 
 ## Immediate next coding target
 
-Implement Step 2 Firestore data architecture docs and typed contracts under `src/`.
+Step 3: finalize and validate `firestore.rules` against a rules test matrix (cross-user writes, admin gating, reward/cooldown tamper attempts).

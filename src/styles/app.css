@@ -54,3 +54,11 @@ body {
   font-size: 0.9rem;
   color: #8ca4b5;
 }
+
+.panel--note code {
+  color: #b9eeff;
+  background: rgba(104, 182, 255, 0.12);
+  border: 1px solid rgba(104, 182, 255, 0.35);
+  border-radius: 4px;
+  padding: 0.1rem 0.35rem;
+}
