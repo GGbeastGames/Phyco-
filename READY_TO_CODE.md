@@ -1,23 +1,26 @@
-# RootAccess — Step 4 Status
+# RootAccess — Step 5 Status
 
-Step 4 repo/deploy topology hardening is now in place.
+Step 5 OS windowing core and white-screen deployment fixes are now in place.
 
 ## What is now completed
 
-- Added GitHub Actions CI pipeline for install, check, rules matrix test, and production build.
-- Added GitHub Pages deployment workflow for static `dist/` publishing.
-- Added Step 4 topology/runbook documentation with structure, CI flow, and environment strategy.
-- Added `.env.example` template to standardize `VITE_*` runtime configuration without committing secrets.
-- Preserved GitHub Pages-safe HTML-first entry model and route fallback strategy.
+- Implemented desktop window manager with drag/focus/minimize/maximize/close lifecycle.
+- Added launcher + taskbar behaviors for all core app windows.
+- Applied hacker-style neon terminal visual system for GUI direction.
+- Added Step 5 implementation notes in `docs/step-5/windowing-system.md`.
+- Added GitHub Pages deployment hardening for blank-page prevention:
+  - `public/404.html` and `public/main.html` included in build output,
+  - `public/.nojekyll` included,
+  - documented source-cause around raw source branch serving.
 
 ## Commands
 
 - Install deps: `npm ci`
-- Rule exploit tests: `npm run test:rules`
 - Checks: `npm run check`
+- Rule exploit tests: `npm run test:rules`
 - Build: `npm run build`
 - Preview: `npm run preview`
 
 ## Immediate next coding target
 
-Step 5: implement OS windowing system core (focus stack, launcher/taskbar, minimize/maximize/snap, reusable app window container).
+Step 6: build Terminal app gameplay loop inside the new reusable window container.

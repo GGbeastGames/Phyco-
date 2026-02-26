@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RootAccess Redirect</title>
+    <script>
+      const route = window.location.pathname + window.location.search + window.location.hash;
+      const repoBase = '/RootAccess-Season-1/';
+      const normalized = route.startsWith(repoBase) ? route.slice(repoBase.length - 1) : route;
+      window.location.replace(`${repoBase}#${normalized}`);
+    </script>
+  </head>
+  <body></body>
+</html>
